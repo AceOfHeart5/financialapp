@@ -1,2 +1,2 @@
 # financialapp
-Toy app for collecting fake financial data.
+Toy app for collecting and displaying fake financial data.
