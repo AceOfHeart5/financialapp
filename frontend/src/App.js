@@ -1,23 +1,31 @@
-import logo from './logo.svg';
+import { useState, useEffect } from 'react'
 import './App.css';
 
+const backendURL = 'http://localhost:3001/'
+
 function App() {
+  const [customers, setCustomers] = useState([])
+
+  const getCustomers = () => {
+    fetch(backendURL)
+    .then(res => res.json())
+    .then(data => setCustomers(data))
+  }
+
+  useEffect(() => {
+    getCustomers()
+  }, [])
+
+  const renderCustomers = () => {
+    return (<ul>
+      {customers.map(customer => <li>{customer.name}</li>)}
+    </ul>)
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>I'm The App!</h1>
+      {renderCustomers()}
     </div>
   );
 }

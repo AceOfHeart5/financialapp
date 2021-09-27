@@ -14,7 +14,6 @@ pgClient.connect()
     .then(() => console.log('connected to postgres'))
     .catch(err => console.log('postgres connection error:', err))
 
-
 const express = require('express')
 const app = express()
 
@@ -25,7 +24,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.get('/', (req, res) => {
     pgClient.query('SELECT * FROM customer;')
-    .then(data => res.send(data))
+    .then(data => res.send(data.rows))
     .catch(err => res.send(err))
 })
 
