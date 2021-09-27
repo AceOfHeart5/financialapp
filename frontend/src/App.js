@@ -1,32 +1,23 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import './App.css';
 
 import CustomerList from './components/CustomerList';
 import CustomerAdd from './components/CustomerAdd';
 
-const backendURL = 'http://localhost:3001/'
-
 function App() {
-  console.log("rendering app")
-  const [customers, setCustomers] = useState([])
+  const [renderCount, setRenderCount] = useState(0)
 
-  const getCustomers = () => {
-    fetch(backendURL)
-    .then(res => res.json())
-    .then(data => setCustomers(data))
+  const rerender = () => {
+    setRenderCount(renderCount + 1)
   }
 
-  useEffect(() => {
-    getCustomers()
-  }, [])
-
-  console.log(customers)
+  console.log(renderCount)
 
   return (
     <div className="App">
       <h1>I'm The App!</h1>
-      <CustomerAdd></CustomerAdd>
-      <CustomerList customers={customers}></CustomerList>
+      <CustomerAdd rerender={rerender}></CustomerAdd>
+      <CustomerList></CustomerList>
     </div>
   );
 }

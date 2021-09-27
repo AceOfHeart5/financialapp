@@ -23,9 +23,34 @@ app.use(cors())
 app.use(express.urlencoded({ extended: false }));
 
 app.get('/', (req, res) => {
+    res.send('Backend is running!')
+})
+
+app.get('/customergetall', (req, res) => {
     pgClient.query('SELECT * FROM customer;')
     .then(data => res.send(data.rows))
     .catch(err => res.send(err))
+})
+
+app.post('/customeradd', (req, res) => {
+    const response = {
+        success: true,
+        data: null,
+        error: null
+    }
+    if (req.body.name === '') {
+        response.success = false
+        response.error = 'cannot add empty name'
+        res.send(response)
+        return
+    }
+    pgClient.query('INSERT INTO customer (name) VALUES ($1);', [req.body.name])
+    .then(data => response.data = data)
+    .catch(err => {
+        response.error = err
+        response.success = false
+    })
+    .finally(() => res.send(response))
 })
 
 app.listen(process.env.SERVER_PORT, () => {
