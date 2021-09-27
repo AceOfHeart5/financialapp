@@ -9,25 +9,24 @@ const pgClient = new Client({
     user:       process.env.DB_USER,
     password:   process.env.DB_PASSWORD
 })
+
 pgClient.connect()
     .then(() => console.log('connected to postgres'))
     .catch(err => console.log('postgres connection error:', err))
 
-pgClient.query("SELECT * FROM customer;", (err, res) => {
-    if (err !== null) {
-        console.log(err)
-    } else {
-        console.log(res.rows)
-    }
-})
 
 const express = require('express')
 const app = express()
 
-app.get('/', (req, res) => {
-    res.send({
+const cors = require('cors')
 
-    })
+app.use(cors())
+app.use(express.urlencoded({ extended: false }));
+
+app.get('/', (req, res) => {
+    pgClient.query('SELECT * FROM customer;')
+    .then(data => res.send(data))
+    .catch(err => res.send(err))
 })
 
 app.listen(process.env.SERVER_PORT, () => {
