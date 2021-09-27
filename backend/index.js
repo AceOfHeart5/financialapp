@@ -2,16 +2,18 @@ require('dotenv').config()
 
 const { Client } = require('pg')
 
-const client = new Client({
+const pgClient = new Client({
     host:       process.env.DB_HOST,
     port:       process.env.DB_PORT,
     database:   process.env.DB_DATABASE,
     user:       process.env.DB_USER,
     password:   process.env.DB_PASSWORD
 })
-client.connect()
+pgClient.connect()
+    .then(() => console.log('connected to postgres'))
+    .catch(err => console.log('postgres connection error:', err))
 
-client.query("SELECT * FROM person;", (err, res) => {
+pgClient.query("SELECT * FROM customer;", (err, res) => {
     if (err !== null) {
         console.log(err)
     } else {
@@ -23,7 +25,9 @@ const express = require('express')
 const app = express()
 
 app.get('/', (req, res) => {
-    res.send("Hello World!")
+    res.send({
+
+    })
 })
 
 app.listen(process.env.SERVER_PORT, () => {
